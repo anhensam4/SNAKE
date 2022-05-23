@@ -19,11 +19,9 @@ public:
 private:
 	RenderWindow window;
 	SDL_Texture* start_tex;
-	SDL_Texture* setting_tex;
 	SDL_Texture* exit_tex;
 
 	SDL_Texture* start_col_tex;
-	SDL_Texture* setting_col_tex;
 	SDL_Texture* exit_col_tex;
 
 	SDL_Texture* bg;

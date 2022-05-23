@@ -47,7 +47,9 @@ int main(int argc, char* args[])
 	Vector2f newPos, startPos;
 	string lvl[] = {"res/dev/lvl1.txt",
 					"res/dev/lvl2.txt",
-					"res/dev/lvl3.txt"};
+					"res/dev/lvl3.txt",
+					"res/dev/lvl4.txt",
+					"res/dev/lvl6.txt"};
 
 	newPos.x = newPos.y = startPos.x = startPos.y = 32;
 
@@ -56,6 +58,13 @@ int main(int argc, char* args[])
 	Map cmap(window);
 	Menu mainMenu(window);
 
+	SDL_Texture* tuto = window.loadTexture("res/gfx/Tutorial.png");
+	SDL_Rect tuto_src, tuto_dst;
+	SDL_QueryTexture(tuto, NULL, NULL, &tuto_src.w, &tuto_src.h);
+	tuto_src.x = tuto_src.y = 0; tuto_dst.x = tuto_src.y = 0;
+	tuto_dst.w = 32*24*2 ; tuto_dst.h = 32*15*2;
+
+	bool tutoloaded = false;
 	bool menuloaded = false;
 	bool reloadmenu = true;
 	bool gameRunning = true;
@@ -102,16 +111,9 @@ int main(int argc, char* args[])
 			{
 				gameRunning = false;
 			}
-
-			if(event.type == SDL_MOUSEMOTION)
-			{
-				cout << "mouse moved" << endl;
-			}
-
 			if(event.type == SDL_KEYDOWN)
 			{
-				cout << "key pressed" << endl;
-				if(firstTimeLoad == 1 && currentType == 3)
+				if(maploaded && firstTimeLoad == 1 && currentType == 3)
 				{
 					if(event.key.keysym.sym == SDLK_UP)
 					{
@@ -133,11 +135,29 @@ int main(int argc, char* args[])
 						newPos.x+=32;
 						move.push_back('r');
 					}
+					if(event.key.keysym.sym == SDLK_ESCAPE)
+					{
+						maploaded = 0;
+						reloadmenu = 1;
+					}
 					for(int i=0; i<move.size(); i++)
 					{
 						cout << move[i] << ' ';
 					}
 					cout << endl;
+				}
+				if(tutoloaded)
+				{
+					if(event.key.keysym.sym == SDLK_ESCAPE)
+					{
+						tutoloaded = 0;
+						reloadmenu = 1;
+					}
+					if(event.key.keysym.sym == SDLK_RETURN)
+					{
+						tutoloaded = 0;
+						reloadLvl = 1;
+					}
 				}
 				if(menuloaded)
 				{
@@ -149,8 +169,10 @@ int main(int argc, char* args[])
 					{
 						mainMenu.index++;
 					}
-					if(mainMenu.index > 2){mainMenu.index = 0;}
+					if(mainMenu.index > 1){mainMenu.index = 0;}
 					if(mainMenu.index < 0){mainMenu.index = 2;}
+					if(mainMenu.index == 0 && event.key.keysym.sym == SDLK_RETURN){menuloaded = 0; tutoloaded = 1;}
+					if(mainMenu.index == 1 && event.key.keysym.sym == SDLK_RETURN){gameRunning = false;}
 				}
 			}
 		}
@@ -166,46 +188,60 @@ int main(int argc, char* args[])
 			}
 			if(currentType == 1)
 			{
+				firstTimeLoad = 0;
+				maploaded = 0;
 				reloadLvl = 1;
 			}
 			if(currentType == 4)
 			{
-				lvlIndex++;
-				newLvl = 1;
-				reloadLvl = 1;
+				if(lvlIndex < 4)
+				{
+					lvlIndex++;
+					newLvl = 1;
+					maploaded = 0;
+					reloadLvl = 1;
+				}
+				else
+				{
+					maploaded = 0;
+					reloadmenu = 1;
+				}
 			}
 		}
 
-		if(firstTimeLoad == 1 && currentType == 0)
+		if(maploaded)
 		{
-			moveStart = SDL_GetTicks();
+			if(firstTimeLoad == 1 && currentType == 0)
+			{
+				moveStart = SDL_GetTicks();
 
-			if(move[moveIndex] == 'u')
-			{
-				newPos.y-=32;
+				if(move[moveIndex] == 'u')
+				{
+					newPos.y-=32;
+				}
+				if(move[moveIndex] == 'd')
+				{
+					newPos.y+=32;
+				}
+				if(move[moveIndex] == 'l')
+				{
+					newPos.x-=32;
+				}
+				if(move[moveIndex] == 'r')
+				{
+					newPos.x+=32;
+				}
+				moveIndex++;
+				if(moveIndex > move.size() - 1){moveIndex = 0;}
+				if(clear == 0){clear = 1;}
 			}
-			if(move[moveIndex] == 'd')
-			{
-				newPos.y+=32;
-			}
-			if(move[moveIndex] == 'l')
-			{
-				newPos.x-=32;
-			}
-			if(move[moveIndex] == 'r')
-			{
-				newPos.x+=32;
-			}
-			moveIndex++;
-			if(moveIndex > move.size() - 1){moveIndex = 0;}
-			if(clear == 0){clear = 1;}
-		}
 
-		moveTime = SDL_GetTicks() - moveStart;
+			moveTime = SDL_GetTicks() - moveStart;
 
-		if(moveDelay > moveTime)
-		{
-			SDL_Delay(moveDelay - moveTime);
+			if(moveDelay > moveTime)
+			{
+				SDL_Delay(moveDelay - moveTime);
+			}
 		}
 
 		//EVENT HANDLING END
@@ -239,6 +275,11 @@ int main(int argc, char* args[])
 		{
 			mainMenu.drawMenu();
 		}
+
+		if(tutoloaded)
+		{
+			window.draw(tuto,tuto_src,tuto_dst);
+		}
 		//GAME RENDER END
 
 
@@ -252,11 +293,10 @@ int main(int argc, char* args[])
 
 		window.display();
 
-		if(firstTimeLoad == 0 && maploaded)
+		if(firstTimeLoad == 0 && (maploaded))
 		{
 			firstTimeLoad = 1;
 		}
-
 	}
 
 	window.cleanUp();
