@@ -4,12 +4,80 @@
 		"selected_items":
 		[
 			[
-				"mo",
-				"moveStart"
+				"main",
+				"mainMenu"
+			],
+			[
+				"map",
+				"maploaded"
 			],
 			[
 				"re",
-				"reloadLvl"
+				"reloadmenu"
+			],
+			[
+				"rel",
+				"reloadmenu"
+			],
+			[
+				"relo",
+				"reloadmenu"
+			],
+			[
+				"men",
+				"Menu"
+			],
+			[
+				"star",
+				"start_tex"
+			],
+			[
+				"in",
+				"inc"
+			],
+			[
+				"i",
+				"include"
+			],
+			[
+				"d",
+				"draw"
+			],
+			[
+				"bg",
+				"bg_dst"
+			],
+			[
+				"SDL",
+				"SDL_Rect"
+			],
+			[
+				"b",
+				"b_tex"
+			],
+			[
+				"b_",
+				"b_filePath"
+			],
+			[
+				"V",
+				"Vector2f"
+			],
+			[
+				"clas",
+				"class"
+			],
+			[
+				"cls",
+				"class"
+			],
+			[
+				"new",
+				"newLvl"
+			],
+			[
+				"mo",
+				"moveStart"
 			],
 			[
 				"l",
@@ -18,10 +86,6 @@
 			[
 				"c",
 				"currentType"
-			],
-			[
-				"new",
-				"newType"
 			],
 			[
 				"move",
@@ -50,14 +114,6 @@
 			[
 				"ve",
 				"Vector2f"
-			],
-			[
-				"map",
-				"maploaded"
-			],
-			[
-				"SDL",
-				"SDL_Texture"
 			],
 			[
 				"chec",
@@ -110,14 +166,6 @@
 			[
 				"M",
 				"Map"
-			],
-			[
-				"i",
-				"inc"
-			],
-			[
-				"in",
-				"include"
 			],
 			[
 				"SD",
@@ -190,10 +238,6 @@
 			[
 				"do",
 				"double"
-			],
-			[
-				"clas",
-				"class"
 			],
 			[
 				"ren",
@@ -289,10 +333,16 @@
 	},
 	"file_history":
 	[
+		"/C/Users/Lenovo/Desktop/Project R/src/map.cpp",
+		"/C/Users/Lenovo/Desktop/Project R/src/renderwindow.cpp",
+		"/C/Users/Lenovo/Desktop/Project R/include/Map.hpp",
+		"/C/Users/Lenovo/Desktop/Project R/include/Button.hpp",
+		"/C/Users/Lenovo/Desktop/Project R/include/RenderWindow.hpp",
+		"/C/Users/Lenovo/Desktop/Project R/src/main.cpp",
+		"/C/Users/Lenovo/Desktop/Project R/include/menu.cpp",
+		"/C/Users/Lenovo/Desktop/Project R/include/button.cpp",
 		"/C/Users/Lenovo/Desktop/Project R/include/Game.hpp",
 		"/C/Users/Lenovo/Desktop/Project R/include/Math.hpp",
-		"/C/Users/Lenovo/Desktop/Project R/src/map.cpp",
-		"/C/Users/Lenovo/Desktop/Project R/include/Map.hpp",
 		"/C/Users/Lenovo/Desktop/Project R/src/TEST.cpp",
 		"/C/Users/Lenovo/Desktop/Project R/src/math.cpp",
 		"/C/Users/Lenovo/Desktop/Project R/include/Entity.hpp",
@@ -319,6 +369,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Menu",
 			"index",
 			"frameDelay",
 			"finish",
@@ -341,7 +392,7 @@
 	},
 	"incremental_find":
 	{
-		"height": 32.0
+		"height": 27.3333333333
 	},
 	"input":
 	{
@@ -359,7 +410,7 @@
 	"pinned_build_system": "Build Debug",
 	"replace":
 	{
-		"height": 72.0
+		"height": 50.6666666667
 	},
 	"save_all_on_build": true,
 	"select_file":

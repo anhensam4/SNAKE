@@ -35,7 +35,7 @@ void Map::loadMap(string filePath, Vector2f &p_pos)
 void Map::drawMap()
 {
 	src.x = src.y = dst.x = dst.y = 0;
-	src.w = src.h = dst.w = dst.h = 32;
+	src.w = src.h = 32 ; dst.w = dst.h = 32*2;
 
 	path = window.loadTexture("res/gfx/plat.png");
 	wall = window.loadTexture("res/gfx/wall.png");
@@ -48,8 +48,8 @@ void Map::drawMap()
 		for(int j=0; j<24; j++)
 		{
 			int type = cmap[i][j];
-			dst.x = j * 32;
-			dst.y = i * 32;
+			dst.x = j * 32 * 2;
+			dst.y = i * 32 * 2;
 
 			switch(type)
 			{

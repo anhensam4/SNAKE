@@ -1,5 +1,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <iostream>
 #include <vector>
 
@@ -7,6 +9,7 @@
 #include "Entity.hpp"
 #include "Math.hpp"
 #include "Map.hpp"
+#include "Menu.hpp"
 
 using namespace std;
 
@@ -33,7 +36,7 @@ int main(int argc, char* args[])
 		cout << "IMG ERROR : " << SDL_GetError() << endl;
 	}
 
-	unsigned int width	= 32*24, height = 32*15;
+	unsigned int width	= 32*24*2, height = 32*15*2;
 	RenderWindow window("Game v1.0", width, height);
 
 	vector<char> move;
@@ -42,8 +45,8 @@ int main(int argc, char* args[])
 	int frameTime, moveTime, moveIndex = 0, lvlIndex = 0;
 	Uint32 frameStart, moveStart;
 	Vector2f newPos, startPos;
-	string lvl[] = {"res/dev/lvl1.txt","0",
-					"res/dev/lvl2.txt","0",
+	string lvl[] = {"res/dev/lvl1.txt",
+					"res/dev/lvl2.txt",
 					"res/dev/lvl3.txt"};
 
 	newPos.x = newPos.y = startPos.x = startPos.y = 32;
@@ -51,12 +54,16 @@ int main(int argc, char* args[])
 	SDL_Texture* Robot = window.loadTexture("res/gfx/Box2.png");
 	Entity robot(startPos, Robot);
 	Map cmap(window);
+	Menu mainMenu(window);
 
+	bool menuloaded = false;
+	bool reloadmenu = true;
 	bool gameRunning = true;
 	bool maploaded = false;
 	bool reloadLvl = false;
 	bool firstTimeLoad = false;
 	bool clear = false;
+	bool newLvl = false;
 
 	SDL_Event event; 
 
@@ -65,13 +72,23 @@ int main(int argc, char* args[])
 
 		frameStart = SDL_GetTicks();
 
-		if((!maploaded)||reloadLvl)
+		if(!menuloaded && reloadmenu)
+		{
+			mainMenu.loadMenu();
+			menuloaded = 1;
+			reloadmenu = 0;
+			cout << "menuloaded" << endl;
+		}
+
+		if(!maploaded && reloadLvl)
 		{
 			cmap.loadMap(lvl[lvlIndex], startPos);
 			cout << startPos.x/32 << ' ' << startPos.y/32 << endl;
 			newPos = startPos;
 			maploaded = 1;
 			if(reloadLvl){reloadLvl = 0;}
+			if(newLvl){firstTimeLoad = 0; newLvl = 0;}
+			cout << "maploaded" << endl;
 		}
 
 		int currentType = checkCpos(robot.getPos(), cmap.cmap);
@@ -122,6 +139,19 @@ int main(int argc, char* args[])
 					}
 					cout << endl;
 				}
+				if(menuloaded)
+				{
+					if(event.key.keysym.sym == SDLK_UP)
+					{
+						mainMenu.index--;
+					}
+					if(event.key.keysym.sym == SDLK_DOWN)
+					{
+						mainMenu.index++;
+					}
+					if(mainMenu.index > 2){mainMenu.index = 0;}
+					if(mainMenu.index < 0){mainMenu.index = 2;}
+				}
 			}
 		}
 
@@ -130,7 +160,6 @@ int main(int argc, char* args[])
 			if(clear == 1 || currentType == 4 || currentType == 1)
 			{
 				move.clear();
-				cout << move.size();
 				clear = 0;
 				moveIndex = 0;
 				moveStart = SDL_GetTicks();
@@ -142,8 +171,8 @@ int main(int argc, char* args[])
 			if(currentType == 4)
 			{
 				lvlIndex++;
+				newLvl = 1;
 				reloadLvl = 1;
-				firstTimeLoad = 0;
 			}
 		}
 
@@ -198,11 +227,18 @@ int main(int argc, char* args[])
 
 		//GAME RENDER START
 
+		if(maploaded)
+		{
+			cmap.drawMap();
 
-		cmap.drawMap();
+			robot.setPos(newPos);
+			window.render(robot);
+		}
 
-		robot.setPos(newPos);
-		window.render(robot);
+		if(menuloaded)
+		{
+			mainMenu.drawMenu();
+		}
 		//GAME RENDER END
 
 
@@ -216,7 +252,7 @@ int main(int argc, char* args[])
 
 		window.display();
 
-		if(firstTimeLoad == 0)
+		if(firstTimeLoad == 0 && maploaded)
 		{
 			firstTimeLoad = 1;
 		}
